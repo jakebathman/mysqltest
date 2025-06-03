@@ -28,7 +28,7 @@ Route::get('backup', function () {
     Storage::disk('public')->makeDirectory('backups');
 
     $process = Process::run([
-        '/Users/jakebathman/Library/Application Support/Herd/bin//mysqldump',
+        config('database.mysqldump_path'),
         '-h', config('database.connections.mysql.host'),
         '-u', config('database.connections.mysql.username'),
         "--password={$password}",
@@ -38,10 +38,9 @@ Route::get('backup', function () {
 
     $size = 0;
     $error = null;
-    try{
+    try {
         $size = Storage::disk('public')->size("backups/{$filename}");
-    }
-    catch(\Throwable $e) {
+    } catch (\Throwable $e) {
         $error = $e->getMessage();
     }
 

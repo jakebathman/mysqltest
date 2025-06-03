@@ -4,6 +4,8 @@ use Illuminate\Support\Str;
 
 return [
 
+    'mysqldump_path' => env('MYSQLDUMP_PATH', '/usr/bin/mysqldump'),
+
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name

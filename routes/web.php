@@ -23,7 +23,8 @@ Route::get('/', function () {
 
 Route::get('backup', function () {
     $password = config('database.connections.mysql.password');
-    $filename = 'backup_' . now()->format('Y-m-d_H-i-s') . '.sql';
+    $count = Record::count();
+    $filename = 'backup_' . $count . '_at_' . now()->format('Y-m-d_H-i-s') . '.sql';
 
     Storage::disk('public')->makeDirectory('backups');
 

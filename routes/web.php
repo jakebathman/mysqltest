@@ -36,8 +36,14 @@ Route::get('backup', function () {
         '--result-file=' . storage_path("app/public/backups/{$filename}"),
     ]);
 
-    $size = Storage::disk('public')->size("backups/{$filename}");
-    $sizeInMB = round($size / 1024 / 1024, 2);
+    $size = 0;
+    $error = null;
+    try{
+        $size = Storage::disk('public')->size("backups/{$filename}");
+    }
+    catch(\Throwable $e) {
+        $error = $e->getMessage();
+    }
 
     return response()->json([
         'exitCode' => $process->exitCode(),
@@ -45,7 +51,8 @@ Route::get('backup', function () {
         'errorOutput' => $process->errorOutput(),
         'filename' => $filename,
         'path' => Storage::disk('public')->path("backups/{$filename}"),
-        'size' => $sizeInMB,
+        'size' => round($size / 1024 / 1024, 2),
+        'error' => $error,
     ]);
 })->name('backup');
 
